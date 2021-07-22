@@ -1,0 +1,69 @@
+After compiling we run these commands to test
+
+./WTFServer 4200
+./WTF configure twinkie 4200
+Here we check configure file and it displays:
+twinkie
+4200
+
+Continue with commands
+./WTF create myProject
+./WTF create urProject
+We see myProject and urProject as local directories now
+In our directory it looks like this
+-myProject
+   -.Manifest
+-urProject
+   -.Manifest
+-repo
+   -myProject
+      -0
+         -.Manifest
+   -urProject
+      -0
+         -.Manifest
+
+./WTF destroy doesntExist
+Server output: project doesn't exist
+
+./WTF destroy myProject
+-myProject
+-urProject
+-repo
+   -urProject
+      -0
+         -.Manifest
+
+Since we didn't fully complete the project we have our own testcases with manually created files.
+For add we manually created test.txt and haha.txt in our project's local directory with random text.
+./WTF add urProject test.txt
+./WTF add urProject haha.txt
+Our local .Manifest goes from 
+0
+
+to
+0
+0	urProject/test.txt	b00df7c9d9eb0da7ceb32fb86c65187239e1eb00
+0	urProject/haha.txt	7c4862bf4d380c9c1c7bc07a05ad71a6e85f0806
+
+./WTF add urProject claefoefi
+Output: No such file or directory
+
+./WTF add sadklfjaslkd test.txt
+Output: Error: Files do not exist
+
+./WTF remove urProject test.txt
+.Manifest becomes
+0
+0	urProject/haha.txt	7c4862bf4d380c9c1c7bc07a05ad71a6e85f0806
+
+Add the file back now that we've tested remove
+.Manifest becomes
+0
+0	urProject/test.txt	b00df7c9d9eb0da7ceb32fb86c65187239e1eb00
+0	urProject/haha.txt	7c4862bf4d380c9c1c7bc07a05ad71a6e85f0806
+
+./WTF currentversion urProject 
+Output:
+0	urProject/test.txt
+0	urProject/haha.txt
