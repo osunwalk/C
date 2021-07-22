@@ -1,0 +1,152 @@
+-----Directory Format-----
+[Asst2]
+   -fileCompress.c
+   -readme.txt
+   -testplan.txt
+   [testFolder]
+	-test.txt
+	-test2.txt
+	[deeper]
+	   -deep.txt
+	   -deep2.txt
+	   -deep3.txt
+	   [evenDeeper]
+		-soDEEP.txt
+		-soDEEP2.txt
+
+To test, we made a testFolder which contained some .txt files as well as another directory called [deeper]. In that directory we had more .txt files and another directory which has even more .txt files. This was done so that we could test the recursive capabilities of our program.
+
+-----Test Cases-----
+Case 1: Build a codebook for a single .txt file. Include symbols, tabs, newlines, and spaces.
+
+Input: ./fileCompress -b ./testFolder/test.txt
+
+test.txt:
+yo gabba gabba gaaaabbbbaaaa 
+h0h0h4h4h33h33	h*lysh!7	F
+
+HuffmanCodebook:
+%
+0	gaaaabbbbaaaa
+100	h0h0h4h4h33h33
+1010	h*lysh!7
+10110	yo
+10111	F
+110	gabba
+1110	%n
+11110	%t
+11111	 
+
+
+Case 2: Build a codebook recursively for the entire [testFolder]
+
+Input: ./fileCompress -b -R ./testFolder
+
+(Putting every file would be way too big)
+
+HuffmanCodebook:
+%
+0	wogahwoiah
+10000	$$Tg9
+100010	(S*
+1000110	MUST
+1000111	GO
+1001	DEEPER
+1010	wo
+10110	wow
+1011100	wof
+1011101	yo
+1011110	gaaaabbbbaaaa
+1011111	h0h0h4h4h33h33
+1100000	h*lysh!7
+1100001	F
+1100010	omg,
+1100011	you
+1100100	are
+1100101	pretty
+110011	*#(&
+1101000	FH
+1101001	398
+1101010	f*(E
+1101011	*FSH
+1101100	OH
+1101101	My
+1101110	GOSH
+1101111	YOU
+1110000	ARE
+1110001	SO
+1110010	78387t*&TFGS
+1110011	#@*
+1110100	vsui
+1110101	must
+1110110	gabba
+1110111	test
+1111000	DEEP
+1111001	%t
+1111010	deep
+1111011	%n
+11111	 
+
+
+Case 3: Compress a single .txt file
+input: ./fileCompress -c ./testFolder/test.txt ./HuffmanCodebook
+test.txt:
+yo gabba gabba gaaaabbbbaaaa 
+h0h0h4h4h33h33	h*lysh!7	F
+
+HuffmanCodebook:
+%
+0	gaaaabbbbaaaa
+100	h0h0h4h4h33h33
+1010	h*lysh!7
+10110	yo
+10111	F
+110	gabba
+1110	%n
+11110	%t
+11111	
+
+test.txt.hcz: 
+10100111111110111111111101111111110001111111001111111101011111
+
+Case 4: Compress all .txt files in a directory recursively
+deep.txt:
+omg, you are pretty deep *#(& FH	398
+f*(E
+
+*FSH
+
+soDEEP.txt: 
+OH My 	GOSH 
+
+YOU	ARE SO 		78387t*&TFGS DEEP #@* vsui
+$$Tg9 (S* test test test deep deep deep deep deep
+must must MUST GO deep DEEPER DEEP DEEP DEEP
+
+test.txt.hcz:
+10100111111110111111111101111111110001111111001111111101011111
+deep.txt.hcz:
+110001011111110001111111110010011111110010111111111101011111110011111111101000111100111010011111011110101011110111111011
+soDEEB.txt.hcz:
+11011001111111011011111111110011101110111111111011111101111011111111001111000011111111000111111111100111110011110010111111111000111111110011111111110100111101110000111111000101111111101111111111101111111111101111111111110101111111110101111111110101111111110101111111110101111011111010111111111010111111100011011111100011111111111101011111100111111111100011111111100011111
+
+Case 5: Decompress a single .hcz file
+decompressing test.txt.hcz into testNew.txt:
+yo gabba gabba gaaaabbbbaaaa%nh0h0h4h4h33h33%th*lysh!7%t%tF
+
+Case 6: Decompress all .hcz files in a directory
+decompressing test.txt.hcz into testNew.txt:
+yo gabba gabba gaaaabbbbaaaa%nh0h0h4h4h33h33%th*lysh!7%t%tF
+
+decompressing deep.txt.hcz:
+omg, you are pretty deep *#(& FH%t%t398%nf*(E%n%n*FSH%t%n
+
+Case 7: Various inputs
+input: ./fileCompress trolled
+output: return 1
+
+input: ./fileCompress -b -c ./testFolder
+output: return 1
+
+input: ./fileCompress -c -d ./testFolder/test.txt
+output: return 1
